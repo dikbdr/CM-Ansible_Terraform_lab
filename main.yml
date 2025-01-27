@@ -8,32 +8,32 @@
         name: nginx
         state: present
         #update_cache: yes
-
-    - name: Start and enable Nginx service
-      systemd:
-        name: nginx
-        state: started
-        enabled: yes
+      when: ansible_distro == "ubuntu"
+    # - name: Start and enable Nginx service
+    #   systemd:
+    #     name: nginx
+    #     state: started
+    #     enabled: yes
    
-    - name: copy the web file into the hosts
-      copy:
-        src: ./index.html
-        dest: /var/www/html/
+    # - name: copy the web file into the hosts
+    #   copy:
+    #     src: ./index.html
+    #     dest: /var/www/html/
 
-    - name: configure nginx
-      template:
-        src: ./nginx_config.j2
-        dest: /etc/nginx/sites-available/default
+    # - name: configure nginx
+    #   template:
+    #     src: ./nginx_config.j2
+    #     dest: /etc/nginx/sites-available/default
 
-    - name: test nginx configuration
-      command: nginx -t  
-      register: nginx_test
+    # - name: test nginx configuration
+    #   command: nginx -t  
+    #   register: nginx_test
 
-    - name: display the output of nxgin test
-      debug:
-        var: nginx_test
+    # - name: display the output of nxgin test
+    #   debug:
+    #     var: nginx_test
 
-    - name: reload nginx
-      systemd:
-        name: nginx
-        state: reloaded
+    # - name: reload nginx
+    #   systemd:
+    #     name: nginx
+    #     state: reloaded

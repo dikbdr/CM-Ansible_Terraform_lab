@@ -1,0 +1,36 @@
+---
+- name: Installiing app according to distribution
+  hosts: all
+  become: yes
+  tasks:
+    - name: print the ansible_facts
+      debug: 
+        var:  ansible_facts ['distribution']   
+      
+    - name: Run the equivalent of "apt-get update" as a separate step
+      apt:
+        update_cache: yes
+      when: ansible_facts ['distribution'] == "Ubuntu"
+
+    - name: Install {{ item }} Package
+      apt:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - "openjdk-11-jdk"
+        #- "apache-latest"
+      when: ansible_facts['distribution'] == "Ubuntu"
+
+    - name: Run the equivalent of "yum update" as a separate step
+      yum:
+        name: '*'
+        state: latest
+      when: ansible_facts['distribution'] == "CentOS"
+
+    - name: Install {{ item }} Package
+      yum:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - "java-11-openjdk-devel"
+      when: ansible_facts['distribution'] == "CentOS"
